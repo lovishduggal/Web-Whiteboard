@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="./logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Web Whiteboard</title>
+</head>
+
+<body>
+    <div class="options-cont"><i class="fa-solid fa-bars"></i></div>
+    <div class="tools-cont">
+        <div><img src="icons/pencil.svg" alt="pencil"></div>
+        <div><img src="icons/eraser.svg" alt="eraser"></div>
+        <div><img src="icons/download.svg" alt="download"></div>
+        <div><img src="icons/file-upload.svg" alt="upload"></div>
+        <div><img src="icons/note-text.svg" alt="sticky note"></div>
+        <div><img src="icons/redo-right.svg" alt="redo"></div>
+        <div><img src="icons/undo-left.svg" alt="undo"></div>
+    </div>
+    <div class="pencil-tool-cont">
+        <div class="pencil-width-cont">
+            <input type="range" min="2" max="10" value="3">
+        </div>
+        <div class="pencil-color-cont">
+            <div class="black pencil-color"></div>
+            <div class="blue pencil-color"></div>
+            <div class="red pencil-color"></div>
+        </div>
+    </div>
+    <div class="eraser-tool"></div>
+    <script src="./tools.js"></script>
+</body>
+
+</html>
