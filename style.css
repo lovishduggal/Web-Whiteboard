@@ -27,6 +27,7 @@ img {
     cursor: pointer;
     font-size: 2rem;
 }
+
 .tools-cont {
     width: 5rem;
     height: auto;
@@ -40,6 +41,8 @@ img {
     position: absolute;
     top: 20vh;
     left: 2rem;
+    transform: translateX(-10rem);
+    transition: transform 2s ease-in-out;
 }
 
 .tools-cont > * {
@@ -49,16 +52,64 @@ img {
 .pencil-tool-cont {
     width: 8rem;
     height: 5rem;
-    background-color: red;
+    background-color: #dfe4ea;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    border-radius: 0.5rem;
     position: absolute;
     top: 20vh;
-    left: 7rem;
+    left: 7.5rem;
 }
 
 .pencil-width-cont {
-    background-color: orange;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pencil-width-cont input {
+    width: 80%;
 }
 
 .pencil-color-cont {
-    background-color: orange;
+    height: calc(100% - 2rem);
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.pencil-color {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+}
+
+.black {
+    background-color: black;
+}
+
+.blue {
+    background-color: blue;
+}
+
+.red {
+    background-color: red;
+}
+
+.eraser-tool-cont {
+    width: 8rem;
+    height: 2rem;
+    background-color: #dfe4ea;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    border-radius: 0.5rem;
+    position: absolute;
+    top: calc(20vh + 6.5rem);
+    left: 7.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.eraser-tool-cont input {
+    width: 80%;
 }
