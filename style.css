@@ -41,8 +41,8 @@ img {
     position: absolute;
     top: 20vh;
     left: 2rem;
-    transform: translateX(-10rem);
-    transition: transform 2s ease-in-out;
+    transform: translateX(0rem);
+    transition: all 500ms ease-in-out;
 }
 
 .tools-cont > * {
@@ -58,6 +58,7 @@ img {
     position: absolute;
     top: 20vh;
     left: 7.5rem;
+    display: none;
 }
 
 .pencil-width-cont {
@@ -105,7 +106,7 @@ img {
     position: absolute;
     top: calc(20vh + 6.5rem);
     left: 7.5rem;
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
 }
