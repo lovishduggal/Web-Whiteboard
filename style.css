@@ -119,8 +119,8 @@ img {
     height: 15rem;
     width: 15rem;
     position: absolute;
-    top: 10rem;
-    left: 10rem;
+    top: calc(20vh + 15rem);
+    left: 7.5rem;
 }
 
 .header-cont {
