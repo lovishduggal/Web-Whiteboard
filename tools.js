@@ -8,12 +8,19 @@ const eraser = document.querySelector('.eraser');
 const sticky = document.querySelector('.sticky-note');
 let pencilFlag = false;
 let eraserFlag = false;
+/**
+ * Toggles the options flag and opens or closes the tools accordingly.
+ * Adds an event listener to the options container that listens for click events.
+ */
 optionsCont.addEventListener('click', () => {
     optionsFlag = !optionsFlag;
     if (optionsFlag) openTools();
     else closeTools();
 });
 
+/**
+ * Opens the tools container by changing the icon and adjusting the display and transform styles.
+ */
 function openTools() {
     const iconElement = optionsCont.children[0];
     iconElement.classList.remove('fa-xmark');
@@ -49,7 +56,6 @@ sticky.addEventListener('click', (e) => {
     stickyCont.innerHTML = `  <div class="header-cont">
                                 <div class="minimize">
                                   <i class="fa-solid fa-down-left-and-up-right-to-center"></i>
-                                  <!-- <i class="fa-solid fa-up-right-and-down-left-from-center"></i> -->
                                 </div>
                                 <div class="remove"><i class="fa-solid fa-xmark"></i></div>
                                  </div>
@@ -59,6 +65,10 @@ sticky.addEventListener('click', (e) => {
 
     document.body.appendChild(stickyCont);
 
+    const minimize = stickyCont.querySelector('.minimize');
+    const remove = stickyCont.querySelector('.remove');
+    stickyNoteActions(stickyCont, minimize, remove);
+
     stickyCont.onmousedown = function (e) {
         dragAndDrop(stickyCont, e);
     };
@@ -67,6 +77,35 @@ sticky.addEventListener('click', (e) => {
     };
 });
 
+// Sticky note actions
+function stickyNoteActions(element, minimize, remove) {
+    remove.addEventListener('click', () => {
+        element.remove();
+    });
+
+    minimize.addEventListener('click', () => {
+        const noteCont = element.querySelector('.note-cont');
+        const display = getComputedStyle(noteCont).getPropertyValue('display');
+        console.log(minimize, minimize.children);
+        if (display === 'none') {
+            noteCont.style.display = 'block';
+            minimize.children[0].classList.remove(
+                'fa-up-right-and-down-left-from-center'
+            );
+            minimize.children[0].classList.add(
+                'fa-down-left-and-up-right-to-center'
+            );
+        } else {
+            noteCont.style.display = 'none';
+            minimize.children[0].classList.remove(
+                'fa-down-left-and-up-right-to-center'
+            );
+            minimize.children[0].classList.add(
+                'fa-up-right-and-down-left-from-center'
+            );
+        }
+    });
+}
 // Drag and Drop on sticky note
 function dragAndDrop(element, event) {
     let shiftX = event.clientX - element.getBoundingClientRect().left;
@@ -74,7 +113,7 @@ function dragAndDrop(element, event) {
 
     element.style.position = 'absolute';
     element.style.zIndex = 1000;
-    document.body.append(element);
+    // document.body.append(element);
 
     moveAt(event.pageX, event.pageY);
 
