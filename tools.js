@@ -6,6 +6,7 @@ const eraserToolCont = document.querySelector('.eraser-tool-cont');
 const pencil = document.querySelector('.pencil');
 const eraser = document.querySelector('.eraser');
 const sticky = document.querySelector('.sticky-note');
+const upload = document.querySelector('.upload');
 let pencilFlag = false;
 let eraserFlag = false;
 /**
@@ -50,18 +51,10 @@ eraser.addEventListener('click', () => {
     else eraserToolCont.style.display = 'none';
 });
 
-sticky.addEventListener('click', (e) => {
+function createStickyNote(htmlTemplate) {
     const stickyCont = document.createElement('div');
     stickyCont.setAttribute('class', 'sticky-cont');
-    stickyCont.innerHTML = `  <div class="header-cont">
-                                <div class="minimize">
-                                  <i class="fa-solid fa-down-left-and-up-right-to-center"></i>
-                                </div>
-                                <div class="remove"><i class="fa-solid fa-xmark"></i></div>
-                                 </div>
-                                <div class="note-cont">
-                                  <textarea></textarea>
-                                </div>`;
+    stickyCont.innerHTML = htmlTemplate;
 
     document.body.appendChild(stickyCont);
 
@@ -75,6 +68,41 @@ sticky.addEventListener('click', (e) => {
     stickyCont.ondragstart = function () {
         return false;
     };
+}
+
+upload.addEventListener('click', () => {
+    // Open file explorer and get the file path
+    const fileInput = document.createElement('input');
+    fileInput.setAttribute('type', 'file');
+    fileInput.click();
+    fileInput.addEventListener('change', (e) => {
+        console.log(e.target.files[0]);
+        const file = e.target.files[0];
+        const url = URL.createObjectURL(file);
+        const htmlTemplate = `<div class="header-cont">
+        <div class="minimize">
+          <i class="fa-solid fa-down-left-and-up-right-to-center"></i>
+        </div>
+        <div class="remove"><i class="fa-solid fa-xmark"></i></div>
+         </div>
+        <div class="note-cont">
+          <img src="${url}" alt="image" />
+        </div>`;
+        createStickyNote(htmlTemplate);
+    });
+});
+
+sticky.addEventListener('click', (e) => {
+    const htmlTemplate = `<div class="header-cont">
+    <div class="minimize">
+      <i class="fa-solid fa-down-left-and-up-right-to-center"></i>
+    </div>
+    <div class="remove"><i class="fa-solid fa-xmark"></i></div>
+     </div>
+    <div class="note-cont">
+      <textarea spellcheck="false"></textarea>
+    </div>`;
+    createStickyNote(htmlTemplate);
 });
 
 // Sticky note actions
