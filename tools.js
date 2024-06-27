@@ -76,7 +76,6 @@ upload.addEventListener('click', () => {
     fileInput.setAttribute('type', 'file');
     fileInput.click();
     fileInput.addEventListener('change', (e) => {
-        console.log(e.target.files[0]);
         const file = e.target.files[0];
         const url = URL.createObjectURL(file);
         const htmlTemplate = `<div class="header-cont">
