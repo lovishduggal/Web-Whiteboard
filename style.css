@@ -79,6 +79,10 @@ img {
     justify-content: space-evenly;
 }
 
+.pencil-color-cont > * {
+    cursor: pointer;
+}
+
 .pencil-color {
     width: 1.5rem;
     height: 1.5rem;
@@ -175,6 +179,6 @@ img {
     height: 100%;
 }
 
-range {
+input {
     cursor: pointer;
 }
