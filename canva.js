@@ -2,6 +2,7 @@ const canvas = document.querySelector('canvas');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
+const download = document.querySelector('.download');
 const pencilColor = document.querySelectorAll('.pencil-color');
 const pencilWidthEle = document.querySelector('.pencil-width');
 const eraserWidthEle = document.querySelector('.eraser-width');
@@ -68,4 +69,12 @@ eraser.addEventListener('click', () => {
         ctx.strokeStyle = penColor;
         ctx.lineWidth = penWidth;
     }
+});
+
+download.addEventListener('click', () => {
+    const dataURL = canvas.toDataURL();
+    const link = document.createElement('a');
+    link.download = 'image.png';
+    link.href = dataURL;
+    link.click();
 });
