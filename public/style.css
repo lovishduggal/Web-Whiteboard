@@ -4,6 +4,10 @@
     box-sizing: border-box;
 }
 
+body {
+    overflow: hidden;
+}
+
 .options-cont {
     height: 5rem;
     width: 5rem;
@@ -47,6 +51,16 @@ img {
 
 .tools-cont > * {
     margin: 1rem;
+}
+
+.shapes-cont {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.shapes-cont > * {
+    width: 20px;
+    margin: 2px;
 }
 
 .pencil-tool-cont {

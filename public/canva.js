@@ -8,6 +8,7 @@ const pencilWidthEle = document.querySelector('.pencil-width');
 const eraserWidthEle = document.querySelector('.eraser-width');
 const redo = document.querySelector('.redo');
 const undo = document.querySelector('.undo');
+const shapesCont = document.querySelector('.shapes-cont');
 
 let mouseDown = false;
 
@@ -20,9 +21,21 @@ let undoRedoStack = [];
 let undoRedoIndex = 0;
 
 // API:
-const ctx = canvas.getContext('2d');
+const ctx = canvas.getContext('2d', { willReadFrequently: true });
 ctx.strokeStyle = penColor;
 ctx.lineWidth = penWidth;
+
+let startX,
+    startY,
+    snapshot,
+    shapeMode = '';
+
+// Add listeners to shapes
+shapesCont.addEventListener('click', (e) => {
+    // Do socket stuff
+    // console.log(e.target.alt);
+    shapeMode = e.target.alt;
+});
 
 // mouse down -> start new path, mousemove -> path fill
 canvas.addEventListener('mousedown', (e) => {
@@ -30,6 +43,7 @@ canvas.addEventListener('mousedown', (e) => {
     const data = { x: e.clientX, y: e.clientY };
     // Sends data to the server
     socket.emit('beginPath', data);
+    // beginPath(data);
 });
 
 canvas.addEventListener('mousemove', (e) => {
@@ -40,7 +54,9 @@ canvas.addEventListener('mousemove', (e) => {
             color: eraserFlag ? eraserColor : penColor,
             width: eraserFlag ? eraserWidth : penWidth,
         };
+
         socket.emit('drawLine', data);
+        // drawLine(data);
     }
 });
 
@@ -87,14 +103,91 @@ function undoRedoCanvas(trackObj) {
 }
 function beginPath(strokeObj) {
     ctx.beginPath();
-    ctx.moveTo(strokeObj.x, strokeObj.y);
+    if (shapeMode) {
+        startX = strokeObj.x;
+        startY = strokeObj.y;
+        snapshot = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    } else {
+        ctx.moveTo(strokeObj.x, strokeObj.y);
+    }
+}
+
+function drawRectangle(startX, startY, endX, endY) {
+    return ctx.strokeRect(startX, startY, endX - startX, endY - startY);
+}
+
+function drawCircle(startX, startY, endX, endY) {
+    const radius = Math.sqrt(
+        Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2)
+    );
+    ctx.beginPath();
+    ctx.arc(startX, startY, radius, 0, 2 * Math.PI);
+    ctx.stroke();
+    return;
+}
+
+function drawTriangle(startX, startY, endX, endY) {
+    ctx.beginPath();
+    ctx.moveTo(startX, startY);
+    ctx.lineTo(endX, endY);
+    ctx.lineTo(startX * 2 - endX, endY);
+    ctx.closePath();
+    ctx.stroke();
+    return;
+}
+
+function drawHeart(startX, startY, endX, endY) {
+    const size = Math.sqrt(
+        Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2)
+    );
+    ctx.beginPath();
+    ctx.moveTo(startX, startY + size / 4);
+    ctx.quadraticCurveTo(startX, startY, startX + size / 4, startY);
+    ctx.quadraticCurveTo(
+        startX + size / 2,
+        startY,
+        startX + size / 2,
+        startY + size / 4
+    );
+    ctx.quadraticCurveTo(
+        startX + size / 2,
+        startY + size / 2,
+        startX,
+        startY + size
+    );
+    ctx.quadraticCurveTo(
+        startX - size / 2,
+        startY + size / 2,
+        startX - size / 2,
+        startY + size / 4
+    );
+    ctx.quadraticCurveTo(startX - size / 2, startY, startX - size / 4, startY);
+    ctx.quadraticCurveTo(startX, startY, startX, startY + size / 4);
+    ctx.closePath();
+    ctx.stroke();
+    return;
 }
 
 function drawLine(strokeObj) {
     toolbar.strokeStyle = strokeObj.color;
     toolbar.lineWidth = strokeObj.width;
-    ctx.lineTo(strokeObj.x, strokeObj.y);
-    ctx.stroke();
+    if (shapeMode) {
+        ctx.putImageData(snapshot, 0, 0);
+        const endX = strokeObj.x;
+        const endY = strokeObj.y;
+        if (shapeMode === 'rectangle') {
+            return drawRectangle(startX, startY, endX, endY);
+        } else if (shapeMode === 'circle') {
+            return drawCircle(startX, startY, endX, endY);
+        } else if (shapeMode === 'triangle') {
+            return drawTriangle(startX, startY, endX, endY);
+        } else if (shapeMode === 'heart') {
+            return drawHeart(startX, startY, endX, endY);
+        }
+    } else {
+        ctx.lineTo(strokeObj.x, strokeObj.y);
+        ctx.stroke();
+    }
 }
 pencilColor.forEach((color) => {
     color.addEventListener('click', () => {
@@ -114,14 +207,15 @@ eraserWidthEle.addEventListener('change', () => {
     ctx.lineWidth = eraserWidth;
 });
 
+pencil.addEventListener('click', () => {
+    shapeMode = '';
+    ctx.strokeStyle = penColor;
+    ctx.lineWidth = penWidth;
+});
 eraser.addEventListener('click', () => {
-    if (eraserFlag) {
-        ctx.strokeStyle = eraserColor;
-        ctx.lineWidth = eraserWidth;
-    } else {
-        ctx.strokeStyle = penColor;
-        ctx.lineWidth = penWidth;
-    }
+    shapeMode = '';
+    ctx.strokeStyle = eraserColor;
+    ctx.lineWidth = eraserWidth;
 });
 
 download.addEventListener('click', () => {
