@@ -58,12 +58,36 @@ img {
     flex-wrap: wrap;
 }
 
-.shapes-cont > * {
+.shapes-cont .setting {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.shapes-cont .setting img {
+    width: 25px;
+    height: 25px;
+}
+
+.shapes-cont > div img {
     width: 20px;
     margin: 2px;
 }
 
 .pencil-tool-cont {
+    width: 8rem;
+    height: 5rem;
+    background-color: #dfe4ea;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    border-radius: 0.5rem;
+    position: absolute;
+    top: 30.5vh;
+    left: 7.5rem;
+    display: none;
+}
+
+.shapes-tool-cont {
     width: 8rem;
     height: 5rem;
     background-color: #dfe4ea;
@@ -82,7 +106,18 @@ img {
     justify-content: center;
 }
 
+.shapes-width-cont {
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .pencil-width-cont input {
+    width: 80%;
+}
+
+.shapes-width-cont input {
     width: 80%;
 }
 
@@ -93,11 +128,28 @@ img {
     justify-content: space-evenly;
 }
 
+.shapes-color-cont {
+    height: calc(100% - 2rem);
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
 .pencil-color-cont > * {
     cursor: pointer;
 }
 
+.shapes-color-cont > * {
+    cursor: pointer;
+}
+
 .pencil-color {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+}
+
+.shapes-color {
     width: 1.5rem;
     height: 1.5rem;
     border-radius: 50%;
@@ -122,7 +174,7 @@ img {
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     border-radius: 0.5rem;
     position: absolute;
-    top: calc(20vh + 6.5rem);
+    top: calc(31vh + 6.5rem);
     left: 7.5rem;
     display: none;
     align-items: center;

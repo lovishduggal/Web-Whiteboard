@@ -3,12 +3,18 @@ let optionsFlag = true;
 const toolsCont = document.querySelector('.tools-cont');
 const pencilToolCont = document.querySelector('.pencil-tool-cont');
 const eraserToolCont = document.querySelector('.eraser-tool-cont');
+const shapesToolCont = document.querySelector('.shapes-tool-cont');
+const shapesCont = document.querySelector('.shapes-cont');
+const setting = document.querySelector('.setting');
 const pencil = document.querySelector('.pencil');
 const eraser = document.querySelector('.eraser');
 const sticky = document.querySelector('.sticky-note');
 const upload = document.querySelector('.upload');
 let pencilFlag = false;
 let eraserFlag = false;
+let settingFlag = false;
+let shapeMode = '';
+
 /**
  * Toggles the options flag and opens or closes the tools accordingly.
  * Adds an event listener to the options container that listens for click events.
@@ -41,14 +47,41 @@ function closeTools() {
 
 pencil.addEventListener('click', () => {
     pencilFlag = !pencilFlag;
-    if (pencilFlag) pencilToolCont.style.display = 'block';
-    else pencilToolCont.style.display = 'none';
+    if (pencilFlag) {
+        console.log('inside pencil');
+        pencilToolCont.style.display = 'block';
+        eraserToolCont.style.display = 'none';
+        shapesToolCont.style.display = 'none';
+        shapeMode = '';
+    } else {
+        pencilToolCont.style.display = 'none';
+    }
 });
 
 eraser.addEventListener('click', () => {
-    eraserFlag = !eraserFlag;
-    if (eraserFlag) eraserToolCont.style.display = 'flex';
-    else eraserToolCont.style.display = 'none';
+    const data = {
+        eraserFlag: !eraserFlag,
+    };
+    socket.emit('eraser', data);
+    // eraserFlag = !eraserFlag;
+    // if (eraserFlag) eraserToolCont.style.display = 'flex';
+    // else eraserToolCont.style.display = 'none';
+});
+
+shapesCont.addEventListener('click', (e) => {
+    // Do socket stuff
+    // console.log(e.target.alt);
+    const data = e.target.alt;
+    console.log(data);
+    if (!(data === 'setting')) socket.emit('shapeMode', data);
+});
+
+setting.addEventListener('click', (e) => {
+    shapeMode = shapeMode ? shapeMode : 'rectangle';
+    const data = {
+        settingFlag: !settingFlag,
+    };
+    socket.emit('setting', data);
 });
 
 function createStickyNote(htmlTemplate) {

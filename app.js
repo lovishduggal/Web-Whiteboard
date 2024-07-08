@@ -30,4 +30,29 @@ io.on('connection', (socket) => {
         // Sends data to the client
         io.sockets.emit('undoRedoCanvas', data);
     });
+
+    socket.on('shapeMode', (data) => {
+        // Sends data to the client
+        io.sockets.emit('shapeMode', data);
+    });
+
+    socket.on('setting', (data) => {
+        // Sends data to the client
+        io.sockets.emit('setting', data);
+    });
+
+    // socket.on('penWidthEle', (data) => {
+    //     // Sends data to the client
+    //     io.sockets.emit('penWidthEle', data);
+    // });
+
+    socket.on('eraserWidthEle', (data) => {
+        // Sends data to the client
+        io.sockets.emit('eraserWidthEle', data);
+    });
+
+    socket.on("eraser", (data) => {
+        // Sends data to the client
+        io.sockets.emit("eraser", data);
+    });
 });

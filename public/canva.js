@@ -3,13 +3,13 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 const download = document.querySelector('.download');
-const pencilColor = document.querySelectorAll('.pencil-color');
+const pencilColor = pencilToolCont.querySelectorAll('.pencil-color');
+const shapesColor = shapesToolCont.querySelectorAll('.shapes-color');
 const pencilWidthEle = document.querySelector('.pencil-width');
 const eraserWidthEle = document.querySelector('.eraser-width');
+const shapesWidthEle = document.querySelector('.shapes-width');
 const redo = document.querySelector('.redo');
 const undo = document.querySelector('.undo');
-const shapesCont = document.querySelector('.shapes-cont');
-
 let mouseDown = false;
 
 let penColor = 'blue';
@@ -27,15 +27,9 @@ ctx.lineWidth = penWidth;
 
 let startX,
     startY,
-    snapshot,
-    shapeMode = '';
+    snapshot = '';
 
 // Add listeners to shapes
-shapesCont.addEventListener('click', (e) => {
-    // Do socket stuff
-    // console.log(e.target.alt);
-    shapeMode = e.target.alt;
-});
 
 // mouse down -> start new path, mousemove -> path fill
 canvas.addEventListener('mousedown', (e) => {
@@ -48,6 +42,7 @@ canvas.addEventListener('mousedown', (e) => {
 
 canvas.addEventListener('mousemove', (e) => {
     if (mouseDown) {
+        console.log(eraserFlag);
         const data = {
             x: e.clientX,
             y: e.clientY,
@@ -169,8 +164,8 @@ function drawHeart(startX, startY, endX, endY) {
 }
 
 function drawLine(strokeObj) {
-    toolbar.strokeStyle = strokeObj.color;
-    toolbar.lineWidth = strokeObj.width;
+    ctx.strokeStyle = strokeObj.color;
+    ctx.lineWidth = strokeObj.width;
     if (shapeMode) {
         ctx.putImageData(snapshot, 0, 0);
         const endX = strokeObj.x;
@@ -189,7 +184,15 @@ function drawLine(strokeObj) {
         ctx.stroke();
     }
 }
+
 pencilColor.forEach((color) => {
+    color.addEventListener('click', () => {
+        penColor = color.classList[0];
+        ctx.strokeStyle = penColor;
+    });
+});
+
+shapesColor.forEach((color) => {
     color.addEventListener('click', () => {
         penColor = color.classList[0];
         ctx.strokeStyle = penColor;
@@ -203,20 +206,34 @@ pencilWidthEle.addEventListener('change', () => {
 });
 
 eraserWidthEle.addEventListener('change', () => {
-    eraserWidth = eraserWidthEle.value;
-    ctx.lineWidth = eraserWidth;
+    const data = {
+        eraserWidth: eraserWidthEle.value,
+        lineWidth: eraserWidth,
+        strokeStyle: eraserColor,
+    };
+    socket.emit('eraserWidthEle', data);
 });
 
-pencil.addEventListener('click', () => {
-    shapeMode = '';
-    ctx.strokeStyle = penColor;
+shapesWidthEle.addEventListener('change', () => {
+    penWidth = shapesWidthEle.value;
     ctx.lineWidth = penWidth;
+    ctx.strokeStyle = penColor;
 });
-eraser.addEventListener('click', () => {
-    shapeMode = '';
-    ctx.strokeStyle = eraserColor;
-    ctx.lineWidth = eraserWidth;
-});
+
+// pencil.addEventListener('click', () => {
+//     if (pencilFlag) {
+//         shapeMode = '';
+//         ctx.strokeStyle = penColor;
+//         ctx.lineWidth = penWidth;
+//     }
+// });
+
+// setting.addEventListener('click', () => {
+//     if (settingFlag) {
+//         ctx.strokeStyle = penColor;
+//         ctx.lineWidth = penWidth;
+//     }
+// });
 
 download.addEventListener('click', () => {
     const dataURL = canvas.toDataURL();
@@ -239,4 +256,46 @@ socket.on('drawLine', (data) => {
 socket.on('undoRedoCanvas', (data) => {
     // Receives data from the server
     undoRedoCanvas(data);
+});
+
+socket.on('shapeMode', (data) => {
+    // Receives data from the server
+    shapeMode = data;
+});
+
+socket.on('setting', (data) => {
+    settingFlag = data.settingFlag;
+    console.log(data);
+    if (settingFlag) {
+        shapesToolCont.style.display = 'block';
+        pencilToolCont.style.display = 'none';
+        // eraserToolCont.style.display = 'none';
+        // socket.emit('eraser', { eraserFlag: eraserFlag }); bug
+    } else {
+        shapesToolCont.style.display = 'none';
+        shapeMode = '';
+    }
+});
+
+// socket.on('penWidthEle', (data) => {
+//     penWidth = data.penWidth;
+//     ctx.lineWidth = penWidth;
+// })
+
+socket.on('eraserWidthEle', (data) => {
+    eraserWidth = data.eraserWidth;
+    ctx.lineWidth = data.lineWidth;
+    ctx.strokeStyle = data.strokeStyle;
+});
+
+socket.on('eraser', (data) => {
+    eraserFlag = data.eraserFlag;
+    if (eraserFlag) {
+        eraserToolCont.style.display = 'flex';
+        pencilToolCont.style.display = 'none';
+        // shapesToolCont.style.display = 'none';
+        // socket.emit('setting', { settingFlag: settingFlag }); bug
+    } else {
+        eraserToolCont.style.display = 'none';
+    }
 });
