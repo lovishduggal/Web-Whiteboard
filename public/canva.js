@@ -263,6 +263,8 @@ socket.on('shapeMode', (data) => {
 });
 
 socket.on('pencil', (data) => {
+    shapeMode = '';
+
     const pencilFlagVal = data.pencilFlag;
     if (pencilFlagVal) {
         penWidth = pencilWidthEle.value;
@@ -274,15 +276,16 @@ socket.on('pencil', (data) => {
 
         eraserFlag = false;
         settingFlag = false;
-
-        shapeMode = '';
     } else {
         pencilToolCont.style.display = 'none';
     }
 });
 
 socket.on('eraser', (data) => {
+    shapeMode = '';
+
     const eraserFlagVal = data.eraserFlag;
+
     if (eraserFlagVal) {
         eraserWidth = eraserWidthEle.value;
 
