@@ -42,7 +42,6 @@ canvas.addEventListener('mousedown', (e) => {
 
 canvas.addEventListener('mousemove', (e) => {
     if (mouseDown) {
-        console.log(eraserFlag);
         const data = {
             x: e.clientX,
             y: e.clientY,
@@ -263,14 +262,55 @@ socket.on('shapeMode', (data) => {
     shapeMode = data;
 });
 
+socket.on('pencil', (data) => {
+    const pencilFlagVal = data.pencilFlag;
+    if (pencilFlagVal) {
+        penWidth = pencilWidthEle.value;
+        penColor = 'blue';
+
+        pencilToolCont.style.display = 'block';
+        eraserToolCont.style.display = 'none';
+        shapesToolCont.style.display = 'none';
+
+        eraserFlag = false;
+        settingFlag = false;
+
+        shapeMode = '';
+    } else {
+        pencilToolCont.style.display = 'none';
+    }
+});
+
+socket.on('eraser', (data) => {
+    const eraserFlagVal = data.eraserFlag;
+    if (eraserFlagVal) {
+        eraserWidth = eraserWidthEle.value;
+
+        eraserToolCont.style.display = 'flex';
+        pencilToolCont.style.display = 'none';
+        shapesToolCont.style.display = 'none';
+
+        pencilFlag = false;
+        settingFlag = false;
+    } else {
+        eraserToolCont.style.display = 'none';
+    }
+});
+
 socket.on('setting', (data) => {
-    settingFlag = data.settingFlag;
-    console.log(data);
-    if (settingFlag) {
+    const settingFlagVal = data.settingFlag;
+    shapeMode = data.shapeMode;
+
+    if (settingFlagVal) {
+        penWidth = shapesWidthEle.value;
+        penColor = 'blue';
+
         shapesToolCont.style.display = 'block';
         pencilToolCont.style.display = 'none';
-        // eraserToolCont.style.display = 'none';
-        // socket.emit('eraser', { eraserFlag: eraserFlag }); bug
+        eraserToolCont.style.display = 'none';
+
+        pencilFlag = false;
+        eraserFlag = false;
     } else {
         shapesToolCont.style.display = 'none';
         shapeMode = '';
@@ -286,16 +326,4 @@ socket.on('eraserWidthEle', (data) => {
     eraserWidth = data.eraserWidth;
     ctx.lineWidth = data.lineWidth;
     ctx.strokeStyle = data.strokeStyle;
-});
-
-socket.on('eraser', (data) => {
-    eraserFlag = data.eraserFlag;
-    if (eraserFlag) {
-        eraserToolCont.style.display = 'flex';
-        pencilToolCont.style.display = 'none';
-        // shapesToolCont.style.display = 'none';
-        // socket.emit('setting', { settingFlag: settingFlag }); bug
-    } else {
-        eraserToolCont.style.display = 'none';
-    }
 });

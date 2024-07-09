@@ -47,39 +47,31 @@ function closeTools() {
 
 pencil.addEventListener('click', () => {
     pencilFlag = !pencilFlag;
-    if (pencilFlag) {
-        console.log('inside pencil');
-        pencilToolCont.style.display = 'block';
-        eraserToolCont.style.display = 'none';
-        shapesToolCont.style.display = 'none';
-        shapeMode = '';
-    } else {
-        pencilToolCont.style.display = 'none';
-    }
+    const data = {
+        pencilFlag,
+    };
+    socket.emit('pencil', data);
 });
 
 eraser.addEventListener('click', () => {
+    eraserFlag = !eraserFlag;
     const data = {
-        eraserFlag: !eraserFlag,
+        eraserFlag,
     };
     socket.emit('eraser', data);
-    // eraserFlag = !eraserFlag;
-    // if (eraserFlag) eraserToolCont.style.display = 'flex';
-    // else eraserToolCont.style.display = 'none';
 });
 
 shapesCont.addEventListener('click', (e) => {
-    // Do socket stuff
-    // console.log(e.target.alt);
     const data = e.target.alt;
-    console.log(data);
     if (!(data === 'setting')) socket.emit('shapeMode', data);
 });
 
 setting.addEventListener('click', (e) => {
     shapeMode = shapeMode ? shapeMode : 'rectangle';
+    settingFlag = !settingFlag;
     const data = {
-        settingFlag: !settingFlag,
+        settingFlag,
+        shapeMode,
     };
     socket.emit('setting', data);
 });
@@ -146,7 +138,6 @@ function stickyNoteActions(element, minimize, remove) {
     minimize.addEventListener('click', () => {
         const noteCont = element.querySelector('.note-cont');
         const display = getComputedStyle(noteCont).getPropertyValue('display');
-        console.log(minimize, minimize.children);
         if (display === 'none') {
             noteCont.style.display = 'block';
             minimize.children[0].classList.remove(

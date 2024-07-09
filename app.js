@@ -51,8 +51,13 @@ io.on('connection', (socket) => {
         io.sockets.emit('eraserWidthEle', data);
     });
 
-    socket.on("eraser", (data) => {
+    socket.on('pencil', (data) => {
         // Sends data to the client
-        io.sockets.emit("eraser", data);
+        io.sockets.emit('pencil', data);
+    });
+
+    socket.on('eraser', (data) => {
+        // Sends data to the client
+        io.sockets.emit('eraser', data);
     });
 });
