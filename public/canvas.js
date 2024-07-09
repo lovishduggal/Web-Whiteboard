@@ -375,22 +375,24 @@ const handleMode = (data, mode) => {
 };
 
 /**
- * Handles the pencil mode by invoking to the handleMode function with 'pencil' as the mode.
- *
- * @param {Object} data - The data to be processed in pencil mode.
- */
-/**
- * Handles the pencil mode by invoking the handleMode function with the provided data and 'pencil' mode.
- *
- * @param {Object} data - The data to be processed in pencil mode.
- */
-/**
- * Handles the pencil mode by invoking the handleMode function with the provided data and 'pencil' mode.
+ * Handles the pencil mode by calling the handleMode function with the provided data.
  *
  * @param {Object} data - The data to be processed in pencil mode.
  */
 const handlePencilMode = (data) => handleMode(data, 'pencil');
 
+/**
+ * Sets the mode to 'eraser' by calling the handleMode function with the provided data.
+ *
+ * @param {Object} data - The data to be passed to the handleMode function.
+ */
+const handleEraserMode = (data) => handleMode(data, 'eraser');
+
+/**
+ * Activates the setting mode by calling the handleMode function with the provided data.
+ *
+ * @param {Object} data - The data to be processed in eraser mode.
+ */
 const handleSettingMode = (data) => handleMode(data, 'setting');
 
 /**
